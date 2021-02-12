@@ -6,7 +6,7 @@
    (env key nil))
   ([key default]
    (let [val (or (System/getenv key) default)]
-     (if val
+     (if (nil? val)
        val
        (throw (AssertionError. (str "Environment variable not set: " key)))))))
 
