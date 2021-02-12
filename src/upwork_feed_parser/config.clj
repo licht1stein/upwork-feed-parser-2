@@ -1,11 +1,48 @@
-(ns upwork-feed-parser.config)
+(ns upwork-feed-parser.config
+  (:require [clojure.string :as s]))
 
-(defonce security-token "a17f6ac9f8ecb476110ce30995262f595b89f4fb2a6aefc03924cc85d368a243e6a19bcdccfd2f47ebdc61d0f2bf812f502d700ecb073abbe4c0a55c389d73cc")
-(defonce user-id "1239609916846313472")
-(defonce org-uid "1239609916854702081")
-(def rss-feed-ids [4803506 4803503])
-(def blacklisted-countries ["India" "Pakistan" "Uzbekistan"])
-(def min-hourly-budget 45)
-(def min-fixed-budget 5000)
-(def redis-url "redis://localhost:6379/")
-(def sleep-between-runs 1000)
+(defn get-env-with-cast-and-default
+  ([key]
+   (get-env-with-cast-and-default key identity nil))
+  ([key cast-fn]
+   (get-env-with-cast-and-default key cast-fn nil))
+  ([key default cast-fn]
+   (let [val (System/getenv key)]
+     (if val
+       (cast-fn val)
+       default))))
+
+(defn get-env-int
+  ([env]
+   (get-env-int env nil))
+  ([env default]
+   (get-env-with-cast-and-default env #(Integer/parseInt %) default)))
+
+(defn get-env-vector
+  ([env]
+   (get-env-vector env []))
+  ([env default]
+   (get-env-with-cast-and-default env default #(s/split % #" "))))
+
+(defn get-env
+  ([key]
+   (get-env key nil))
+  ([key default]
+   (or (System/getenv key) default)))
+
+(defn get-env-or-throw [key]
+  (let [val (get-env key)]
+    (if val
+      val
+      (throw (AssertionError. (str "Environment variable not set: " key))))))
+
+(defonce security-token (get-env-or-throw "UPWORK_SECURITY_TOKEN"))
+(defonce user-id (get-env-or-throw "UPWORK_USER_ID"))
+(defonce org-uid (get-env-or-throw "UPWORK_USER_ID"))
+(defonce bot-token (get-env-or-throw "BOT_TOKEN"))
+(def rss-feed-ids (s/split (get-env-or-throw "UPWORK_FEED_IDS") #" "))
+(def blacklisted-countries (get-env-vector "EXCLUDED_COUNTRIES"))
+(def min-hourly-budget (get-env-int "MIN_HOURLY_BUDGET" 45))
+(def min-fixed-budget (get-env-int "MIN_FIXED_BUDGET" 5000))
+(def redis-url (get-env "REDIS_URL" "redis://localhost:6379/"))
+(def sleep-between-runs (get-env-int "SLEEP_BETWEEN_RUNS" 1000))
