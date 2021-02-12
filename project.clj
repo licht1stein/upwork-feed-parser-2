@@ -7,7 +7,8 @@
                  [org.clojars.scsibug/feedparser-clj "0.4.0"]
                  [clj-soup/clojure-soup "0.1.3"]
                  [expectations/clojure-test "1.2.1"]
-                 [selmer "1.12.33"]]
+                 [selmer "1.12.33"]
+                 [com.taoensso/carmine "3.1.0"]]
   :main ^:skip-aot upwork-feed-parser.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all

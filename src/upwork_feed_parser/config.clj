@@ -7,3 +7,5 @@
 (def blacklisted-countries ["India" "Pakistan" "Uzbekistan"])
 (def min-hourly-budget 45)
 (def min-fixed-budget 5000)
+(def redis-url "redis://localhost:6379/")
+(def sleep-between-runs 1000)
