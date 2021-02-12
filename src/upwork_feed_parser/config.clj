@@ -40,7 +40,7 @@
 (defonce user-id (get-env-or-throw "UPWORK_USER_ID"))
 (defonce org-uid (get-env-or-throw "UPWORK_USER_ID"))
 (defonce bot-token (get-env-or-throw "BOT_TOKEN"))
-(def rss-feed-ids (s/split (get-env-or-throw "UPWORK_FEED_IDS") #" "))
+(def rss-feed-ids (get-env-vector "UPWORK_FEED_IDS"))
 (def blacklisted-countries (get-env-vector "EXCLUDED_COUNTRIES"))
 (def min-hourly-budget (get-env-int "MIN_HOURLY_BUDGET" 45))
 (def min-fixed-budget (get-env-int "MIN_FIXED_BUDGET" 5000))
