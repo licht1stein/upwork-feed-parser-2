@@ -2,6 +2,7 @@
   (:require [feedparser-clj.core :refer [parse-feed]]
             [jsoup.soup :as soup]
             [clojure.string :as s]
+            [selmer.parser :refer [render]]
             [upwork-feed-parser.rss.parsers :refer [parse-meta]]
             [upwork-feed-parser.config :as c]
             [feedparser-clj.core :as fp]))
@@ -35,11 +36,14 @@
 
 (defn parse-entry [entry]
   (let [parsed-body (parse-entry-body entry)
+        budget (if (:budget parsed-body) {} {:budget 0})
+        title {:title (s/replace (:title entry) " - Upwork" "")}
         base {:title (:title entry)
               :link (:link entry)
               :date (:published-date entry)
-              :id (trim-job-url (:link entry))}]
-    (merge base parsed-body)))
+              :id (trim-job-url (:link entry))}
+        res (merge base parsed-body budget title)]
+    res))
 
 (defn get-and-parse-feeds [urls]
   (map parse-entry (get-multiple-raw-feeds urls)))
@@ -60,6 +64,35 @@
 (defn country-not-blacklisted? [entry]
   (not (some #(= (:country entry) %) c/blacklisted-countries)))
 
+(defn skill-count-below? [entry max-skills]
+  (<= (count (:skills entry)) max-skills))
+
 (defn filter-parsed-feed [entries & pred-funcs]
   (filter (reduce every-pred pred-funcs)  entries))
+
+(def entry-template
+  "
+  <b>{{title}}</b>
+  Budget: {{budget}}
+  Country: {{country}}
+  Category: {{category}}
+  Skills: {{skills}}
+
+  {{body}}
+
+  <a href=\"{{link}}\">Link</a>")
+
+(defn format-budget [budget]
+  (if (seq? budget)
+    (s/join "-" budget)
+    (pr-str budget)))
+
+(defn format-entry [entry]
+  (let [budget (format-budget (:budget entry))
+        skills (if (:skills entry) (s/join ", " (:skills entry)) "N/A")
+        body (if (:body entry) (:body entry) "N/A")
+        rendered (render entry-template (assoc entry :budget budget :skills skills :body body))]
+    (-> rendered
+      (s/replace "&amp;" "&")
+      (s/replace "&#39;" "'"))))
 

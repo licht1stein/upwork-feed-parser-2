@@ -56,8 +56,12 @@
   (expect (budget-above? (first parsed-data) 25) true)
   (expect (budget-above? (first parsed-data) 26) false)
   (expect (budget-above? (second parsed-data) 80) true)
-  (expect (budget-above? (second parsed-data) 81) false))
+  (expect (budget-above? (second parsed-data) 81) false)
+  (expect (budget-above? {:budget 80} 81) false))
 
 (defexpect hourly?-test
   (expect (hourly? (first parsed-data)) true)
   (expect (hourly? (second parsed-data)) false))
+
+(defexpect test-formatter
+  (expect (format-entry (first parsed-data))) nil)
