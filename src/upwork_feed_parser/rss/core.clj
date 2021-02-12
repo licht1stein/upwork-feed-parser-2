@@ -41,8 +41,8 @@
               :id (trim-job-url (:link entry))}]
     (merge base parsed-body)))
 
-(defn get-and-parse-feeds [& urls]
-  (map (parse-entry (get-multiple-raw-feeds urls))))
+(defn get-and-parse-feeds [urls]
+  (map parse-entry (get-multiple-raw-feeds urls)))
 
 (defn budget-above? [entry target]
   (let [budget (:budget entry)]
