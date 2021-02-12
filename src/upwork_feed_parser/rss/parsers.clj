@@ -44,5 +44,5 @@
 
 (defmethod parse-meta :posted-on [prop] {:posted-on (trimmed-or-nil (s/replace prop "Posted On:" ""))})
 
-(defmethod parse-meta :unknown [prop]
-  (throw (Exception. (str "Failed to categorize: " prop))))
+(defmethod parse-meta :unknown [prop])
+  ;(throw (Exception. (str "Failed to categorize: " prop))))
