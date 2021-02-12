@@ -6,8 +6,8 @@
         params {:chat_id                  chat-id
                 :text                     text
                 :parse_mode               "HTML"
-                :disable_web_page_preview true}
-        res (client/post url {:form-params params})]))
+                :disable_web_page_preview true}]
+    (client/post url {:form-params params})))
 
 (defn send-multiple-messages [bot-token chat-id messages]
   (if-not (empty? messages)
