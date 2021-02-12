@@ -3,26 +3,28 @@
 
 (defn env
   ([key]
-   (env key nil))
-  ([key default]
-   (let [val (or (System/getenv key) default)]
+   (let [val (System/getenv key)]
      (if (nil? val)
-       val
-       (throw (AssertionError. (str "Environment variable not set: " key)))))))
+       (throw (AssertionError. (str "Environment variable not set: " key)))
+       val)))
+  ([key default]
+   (or (System/getenv key) default)))
 
 (defn env-and-cast
   ([key cast-fn]
-   (env-and-cast key nil cast-fn))
+   (let [val (env key)]
+     (cast-fn val)))
   ([key default cast-fn]
    (let [val (env key default)]
-     (if (= val default)
-       default
-       (cast-fn val)))))
+     (cond
+       (nil? val) default
+       (= val default) default
+       :default (cast-fn val)))))
 
 (defn env-cast-maker [cast-fn]
   (fn
     ([key]
-     (env-and-cast key nil cast-fn))
+     (env-and-cast key cast-fn))
     ([key default]
      (env-and-cast key default cast-fn))))
 
@@ -33,10 +35,10 @@
 (defonce user-id (env "UPWORK_USER_ID"))
 (defonce org-uid (env "UPWORK_USER_ID"))
 (defonce bot-token (env "BOT_TOKEN"))
-(def rss-feed-ids (env-vec "UPWORK_FEED_IDS"))
-(def blacklisted-countries (env-vec "EXCLUDED_COUNTRIES"))
+(defonce telegram-chat-id (env-int "TELEGRAM_CHAT_ID"))
+(def rss-feed-ids (env-vec "UPWORK_FEED_IDS" []))
+(def blacklisted-countries (env-vec "EXCLUDED_COUNTRIES" []))
 (def min-hourly-budget (env-int "MIN_HOURLY_BUDGET" 45))
-(def min-fixed-budget (env-int "MIN_FIXED_BUDGET" 5000))
+(def min-fixed-budget (env-int "MIN_FIXED_BUDGET" nil))
 (def redis-url (env "REDIS_URL" "redis://localhost:6379/"))
 (def sleep-between-runs (env-int "SLEEP_BETWEEN_RUNS" 1000))
-(def bot-token (env "BOT_TOKEN"))
