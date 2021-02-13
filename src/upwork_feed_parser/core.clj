@@ -19,19 +19,18 @@
 
 (defn -main
   [& args]
-  ;(while true
-  (let [old-checked-ids (get-checked-ids)
-        result (runner old-checked-ids
-                       #(p/hourly-or-high-fixed-budget? % c/min-fixed-budget)
-                       #(p/budget-above? % c/min-hourly-budget)
-                       p/country-not-blacklisted?
-                       p/no-stop-words?)
-        new-checked-ids (into [] (:checked-ids result))
-        formatted-entries (into [] (map f/format-entry (:new-entries result)))]
-    (println "New entries: " (count (:new-entries result)))
-    (println (str "Checked ids: " (count old-checked-ids) " -> " (count new-checked-ids)))
-    (set-checked-ids new-checked-ids)
-    (tg/send-multiple-messages c/bot-token c/telegram-chat-id formatted-entries)
-    (println "Sleep: " c/sleep-between-runs)
-    ;(Thread/sleep c/sleep-between-runs)
-    (first (:new-entries result))))
+  (while true
+    (let [old-checked-ids (get-checked-ids)
+          result (runner old-checked-ids
+                         #(p/hourly-or-high-fixed-budget? % c/min-fixed-budget)
+                         #(p/budget-above? % c/min-hourly-budget)
+                         p/country-not-blacklisted?
+                         p/no-stop-words?)
+          new-checked-ids (into [] (:checked-ids result))
+          formatted-entries (into [] (map f/format-entry (:new-entries result)))]
+      (println "New entries: " (count (:new-entries result)))
+      (println (str "Checked ids: " (count old-checked-ids) " -> " (count new-checked-ids)))
+      (set-checked-ids new-checked-ids)
+      (tg/send-multiple-messages c/bot-token c/telegram-chat-id formatted-entries)
+      (println "Sleep: " c/sleep-between-runs)
+      (Thread/sleep c/sleep-between-runs))))
