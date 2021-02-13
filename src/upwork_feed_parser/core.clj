@@ -32,7 +32,6 @@
     (println (str "Checked ids: " (count old-checked-ids) " -> " (count new-checked-ids)))
     (set-checked-ids new-checked-ids)
     (tg/send-multiple-messages c/bot-token c/telegram-chat-id formatted-entries)
-    (println (first formatted-entries))
     (println "Sleep: " c/sleep-between-runs)
     ;(Thread/sleep c/sleep-between-runs)
     (first (:new-entries result))))

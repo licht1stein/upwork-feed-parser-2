@@ -1,0 +1,1 @@
+worker: java -cp target/upwork-feed-parser-standalone.jar clojure.main -m upwork-feed-parser.core
