@@ -27,12 +27,30 @@
 (defn remove-metadata [body]
   (re-find #".+?(?=Hourly Range:|Budget:)" body))
 
+(defn make-body-html [body]
+  (let [body (soup/select "body" body)
+        lines (-> body
+                  (s/replace "<body>" "")
+                  (s/replace "</body>" "")
+                  (s/replace "<br>" "\n")
+                  (s/replace "<b>" "")
+                  (s/replace "</b>" "")
+                  (s/replace "  " " ")
+                  (s/replace "&nbsp;" " ")
+                  (s/replace "&amp;" "&")
+                  (s/replace "&#39;" "'")
+                  (s/split #"Hourly Range:|Budget:|Posted On:")
+                  (first)
+                  (s/split-lines))
+        non-empty-lines (map s/trim (filter #(re-find #"\S" %) lines))]
+     (s/join "\n\n" non-empty-lines)))
+
 (defn parse-entry-body [entry]
   (let [parsed (soup/parse (:value (first (:contents entry))))
         meta-tags (re-seq #"<b>[\w\s]+</b>:[\w\s].*" (.html parsed))
         parsed-meta-tags (map #(.text (soup/parse %)) meta-tags)
         final-meta-map (into {} (map parse-meta parsed-meta-tags))]
-    (assoc final-meta-map :body (remove-metadata (.text parsed)))))
+    (assoc final-meta-map :body (make-body-html parsed))))
 
 (defn parse-entry [entry]
   (let [parsed-body (parse-entry-body entry)
@@ -72,15 +90,16 @@
 
 (def entry-template
   "
-  <b>{{title}}</b>
-  Budget: {{budget}}
-  Country: {{country}}
-  Category: {{category}}
-  Skills: {{skills}}
+<b>{{title}}</b>
+{{country}} | {{posted-on}}
+Budget: {{budget}}
 
-  {{body}}
+Category: {{category}}
+Skills: {{skills}}
 
-  <a href=\"{{link}}\">Link</a>")
+{{body}}
+
+<a href=\"{{link}}\">Link</a>")
 
 (defn format-budget [budget]
   (if (seq? budget)
@@ -92,7 +111,5 @@
         skills (if (:skills entry) (s/join ", " (:skills entry)) "N/A")
         body (if (:body entry) (:body entry) "N/A")
         rendered (render entry-template (assoc entry :budget budget :skills skills :body body))]
-    (-> rendered
-      (s/replace "&amp;" "&")
-      (s/replace "&#39;" "'"))))
+    rendered))
 

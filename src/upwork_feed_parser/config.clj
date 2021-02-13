@@ -40,5 +40,6 @@
 (def blacklisted-countries (env-vec "EXCLUDED_COUNTRIES" []))
 (def min-hourly-budget (env-int "MIN_HOURLY_BUDGET" 45))
 (def min-fixed-budget (env-int "MIN_FIXED_BUDGET" nil))
-(def redis-url (env "REDIS_URL" "redis://localhost:6379/"))
+(def redis-url (env "REDIS_URL" nil))
 (def sleep-between-runs (env-int "SLEEP_BETWEEN_RUNS" 1000))
+(def time-zone (env "TZ" "Europe/Kiev"))

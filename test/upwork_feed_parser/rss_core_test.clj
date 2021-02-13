@@ -65,3 +65,6 @@
 
 (defexpect test-formatter
   (expect (format-entry (first parsed-data))) nil)
+
+(defexpect test-make-body-html
+  (expect (:body (parse-entry-body (first data))) nil))
