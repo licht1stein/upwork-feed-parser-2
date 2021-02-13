@@ -1,1 +1,1 @@
-worker: java -cp target/upwork-feed-parser-standalone.jar clojure.main -m upwork-feed-parser.core
+worker: lein with-profile production trampoline run -m upwork-feed-parser.core
