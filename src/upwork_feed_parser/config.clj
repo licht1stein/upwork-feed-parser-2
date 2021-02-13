@@ -31,6 +31,10 @@
 (def env-int (env-cast-maker #(Integer/parseInt %)))
 (def env-vec (env-cast-maker #(s/split % #" ")))
 
+(def settings {:rss-feeds [
+                           {:id 4803506 :name "Telegram API"}
+                           {:id 4803503 :name "API and Automation"}]})
+
 (defonce security-token (env "UPWORK_SECURITY_TOKEN"))
 (defonce user-id (env "UPWORK_USER_ID"))
 (defonce org-uid (env "UPWORK_USER_ID"))
