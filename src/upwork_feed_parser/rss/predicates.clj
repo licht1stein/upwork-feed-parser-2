@@ -1,5 +1,9 @@
 (ns upwork-feed-parser.rss.predicates
-  (:require [upwork-feed-parser.config :as c]))
+  (:require [clojure.string :as s]
+            [upwork-feed-parser.config :as c]
+            [upwork-feed-parser.utils :refer :all]
+            [clojure.set :as set]))
+
 
 (defn budget-above? [entry target]
   (let [budget (:budget entry)]
@@ -15,7 +19,14 @@
    (or (hourly? entry) (budget-above? entry high-budget))))
 
 (defn country-not-blacklisted? [entry]
-  (not (some #(= (:country entry) %) c/blacklisted-countries)))
+  (not-in? (:country entry) c/blacklisted-countries))
+
+(defn no-stop-words?
+  ([entry]
+   (no-stop-words? entry c/stop-words))
+  ([entry stop-words]
+   (let [entry-words (concat (s/split (:body entry) #" ") (s/split (:title entry) #" "))]
+     (empty? (set/intersection (set stop-words) (set entry-words))))))
 
 (defn skill-count-below? [entry max-skills]
   (<= (count (:skills entry)) max-skills))

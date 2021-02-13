@@ -28,7 +28,9 @@
 {{country}} | {{posted-on}}
 Budget: {{budget}}
 
+Feed: {{feed-name}}
 Category: {{category}}
+
 Skills: {{skills}}
 
 {{body}}
