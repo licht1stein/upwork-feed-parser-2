@@ -19,7 +19,7 @@
 
 (defn -main
   [& args]
-  (println "Startin Upwork Feed Parser")
+  (println "Starting Upwork Feed Parser")
   (while true
     (let [old-checked-ids (get-checked-ids)
           result (runner old-checked-ids
