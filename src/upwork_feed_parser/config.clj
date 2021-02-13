@@ -36,7 +36,7 @@
 (defonce user-id (env "UPWORK_USER_ID"))
 (defonce org-uid (env "UPWORK_USER_ID"))
 (defonce bot-token (env "BOT_TOKEN"))
-(defonce telegram-chat-id (env-int "TELEGRAM_CHAT_ID"))
+(defonce telegram-chat-id (env "TELEGRAM_CHAT_ID"))
 (def blacklisted-countries (env-vec "EXCLUDED_COUNTRIES" []))
 (def min-hourly-budget (env-int "MIN_HOURLY_BUDGET" 45))
 (def min-fixed-budget (env-int "MIN_FIXED_BUDGET" 2500))
