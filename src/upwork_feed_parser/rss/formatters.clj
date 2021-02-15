@@ -15,6 +15,7 @@
                   (s/replace "  " " ")
                   (s/replace "&nbsp;" " ")
                   (s/replace "&amp;" "&")
+                  (s/replace "&#38;" "&")
                   (s/replace "&#39;" "'")
                   (s/split #"Hourly Range:|Budget:|Posted On:")
                   (first)
