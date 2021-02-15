@@ -3,7 +3,6 @@
             [jsoup.soup :as soup]
             [selmer.parser :refer [render]]))
 
-
 (defn format-body-text [body]
   (let [body (soup/select "body" body)
         lines (-> body
@@ -17,6 +16,7 @@
                   (s/replace "&amp;" "&")
                   (s/replace "&#38;" "&")
                   (s/replace "&#39;" "'")
+                  (s/replace "&quot;" "\"")
                   (s/split #"Hourly Range:|Budget:|Posted On:")
                   (first)
                   (s/split-lines))
