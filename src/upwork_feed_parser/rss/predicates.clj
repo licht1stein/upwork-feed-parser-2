@@ -5,11 +5,14 @@
             [clojure.set :as set]))
 
 
-(defn budget-above? [entry target]
-  (let [budget (:budget entry)]
-    (if (seq? budget)
-      (and (>= (last budget) target) (>= (first budget) (* target 0.8)))
-      (>= budget target))))
+(defn budget-above?
+  ([entry target]
+   (budget-above? entry target c/max-spread))
+  ([entry target max-spread-percentage]
+   (let [budget (:budget entry)]
+     (if (seq? budget)
+       (and (>= (last budget) target) (>= (first budget) (* target (- 1 max-spread-percentage))))
+       (>= budget target)))))
 
 (defn hourly? [entry]
   (:hourly entry))

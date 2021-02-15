@@ -22,6 +22,7 @@
          :default (cast-fn val))))))
 
 (def env-int (env-cast-maker #(Integer/parseInt %)))
+(def env-float (env-cast-maker #(Float/parseFloat %)))
 (def env-vec (env-cast-maker #(s/split % #" ")))
 (def env-edn (env-cast-maker #(clojure.edn/read-string %)))
 
@@ -37,6 +38,7 @@
 (def sleep-between-runs (env-int "SLEEP_BETWEEN_RUNS" 1000))
 (def time-zone (env "TZ" "Europe/Kiev"))
 (def stop-words (env "STOP_WORDS" []))
+(def max-spread (env-float "MAX_SPREAD_HOURLY_BUDGET" 0.2))
 
 ;; Sample of UPWORK_FEEDS_EDN
 ;;  [{:id 4803506 :name "Telegram API"}
