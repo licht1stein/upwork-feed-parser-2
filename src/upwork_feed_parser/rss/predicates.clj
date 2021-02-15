@@ -8,7 +8,7 @@
 (defn budget-above? [entry target]
   (let [budget (:budget entry)]
     (if (seq? budget)
-      (>= (last budget) target)
+      (and (>= (last budget) target) (>= (first budget) (* target 0.8)))
       (>= budget target))))
 
 (defn hourly? [entry]
