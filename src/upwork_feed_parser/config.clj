@@ -10,23 +10,16 @@
   ([key default]
    (or (System/getenv key) default)))
 
-(defn env-and-cast
-  ([key cast-fn]
-   (let [val (env key)]
-     (cast-fn val)))
-  ([key default cast-fn]
-   (let [val (env key default)]
-     (cond
-       (nil? val) default
-       (= val default) default
-       :default (cast-fn val)))))
-
 (defn env-cast-maker [cast-fn]
-  (fn
+  (fn get-key
     ([key]
-     (env-and-cast key cast-fn))
+     (get-key key cast-fn))
     ([key default]
-     (env-and-cast key default cast-fn))))
+     (let [val (env key default)]
+       (cond
+         (nil? val) default
+         (= val default) default
+         :default (cast-fn val))))))
 
 (def env-int (env-cast-maker #(Integer/parseInt %)))
 (def env-vec (env-cast-maker #(s/split % #" ")))

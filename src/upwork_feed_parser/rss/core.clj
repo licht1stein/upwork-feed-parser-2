@@ -1,25 +1,21 @@
 (ns upwork-feed-parser.rss.core
-  (:require [feedparser-clj.core :refer [parse-feed]]
-            [jsoup.soup :as soup]
+  (:require [jsoup.soup :as soup]
             [clojure.string :as s]
             [upwork-feed-parser.rss.parsers :refer [parse-meta]]
             [upwork-feed-parser.config :as c]
-            [feedparser-clj.core :as fp]
+            [remus :as remus]
             [upwork-feed-parser.rss.helpers :refer [make-feed-url get-job-id-from-url]]
             [upwork-feed-parser.rss.predicates :refer :all]
             [upwork-feed-parser.rss.formatters :refer :all]))
 
 (def rss-feeds (:rss-feeds c/settings))
 
-(defn get-feed-old
-  ([url] (:entries (fp/parse-feed url))))
 
 (defn get-feed [feed]
-  (merge {:entries (:entries (fp/parse-feed (make-feed-url (:id feed))))} feed))
+  (let [url (make-feed-url (:id feed))
+        res (remus/parse-url url {:decode-cookies false :cookie-policy :none})]
+    (merge {:entries ((comp :entries :feed) res)} feed)))
 
-
-;(defn get-multiple-raw-feeds [urls]
-;  (flatten (map get-feed urls)))
 
 (defn get-all-feeds
   ([]
