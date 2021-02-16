@@ -56,11 +56,15 @@
                                        :body "Hello, I want to create simple FAQ Telegram bot with simple tickets option for technical support. Let me know, if you're interesting. ", :country "Russia"}))
 
 (defexpect budget-above?-test
-  (expect (budget-above? (first parsed-data) 25) true)
-  (expect (budget-above? (first parsed-data) 26) false)
-  (expect (budget-above? (second parsed-data) 80) true)
-  (expect (budget-above? (second parsed-data) 81) false)
-  (expect (budget-above? {:budget 80} 81) false))
+  (expect (budget-above? {:budget 80} 81 ) false)
+  (expect (budget-above? {:budget '(25 40)} 35) true)
+  (expect (budget-above? {:budget '(25 40)} 41) false)
+  (expect (budget-above? {:budget 100} 100) true))
+
+(defexpect test-spread-limited?
+  (expect (spread-limited? {:budget 100} 0.2) true)
+  (expect (spread-limited? {:budget '(80 100)} 0.2) true)
+  (expect (spread-limited? {:budget '(80 100)} 0.19) false))
 
 (defexpect hourly?-test
   (expect (hourly? (first parsed-data)) true)

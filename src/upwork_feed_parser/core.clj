@@ -25,6 +25,7 @@
           result (runner old-checked-ids
                          #(p/hourly-or-high-fixed-budget? % c/min-fixed-budget)
                          #(p/budget-above? % c/min-hourly-budget)
+                         p/spread-limited?
                          p/country-not-blacklisted?
                          p/no-stop-words?)
           new-checked-ids (into [] (:checked-ids result))

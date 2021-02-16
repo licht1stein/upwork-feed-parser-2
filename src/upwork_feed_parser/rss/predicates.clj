@@ -7,12 +7,19 @@
 
 (defn budget-above?
   ([entry target]
-   (budget-above? entry target c/max-spread))
-  ([entry target max-spread-percentage]
    (let [budget (:budget entry)]
      (if (seq? budget)
-       (and (>= (last budget) target) (>= (first budget) (* target (- 1 max-spread-percentage))))
+       (>= (last budget) target)
        (>= budget target)))))
+
+(defn spread-limited?
+  ([record]
+   (spread-limited? record c/max-spread))
+  ([record max-spread-percentage]
+   (let [budget (:budget record)]
+     (if (seq? budget)
+       (<= (- 1 (/ (first budget) (last budget))) max-spread-percentage)
+       true))))
 
 (defn hourly? [entry]
   (:hourly entry))
