@@ -16,4 +16,6 @@ jobs:
       - name: Install dependencies
         run: lein deps
       - name: Run tests
+        env:
+          UPWORK_SECURITY_TOKEN: foo
         run: lein test
