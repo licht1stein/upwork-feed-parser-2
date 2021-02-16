@@ -53,6 +53,7 @@
     <orderEntry type="library" name="Leiningen: org.lz4/lz4-java:1.7.1" level="project" />
     <orderEntry type="library" name="Leiningen: org.slf4j/slf4j-api:1.7.16" level="project" />
     <orderEntry type="library" name="Leiningen: org.tukaani/xz:1.8" level="project" />
+    <orderEntry type="library" name="Leiningen: pjstadig/humane-test-output:0.9.0" level="project" />
     <orderEntry type="library" name="Leiningen: potemkin:0.4.5" level="project" />
     <orderEntry type="library" name="Leiningen: remus:0.2.1" level="project" />
     <orderEntry type="library" name="Leiningen: riddley:0.1.12" level="project" />
