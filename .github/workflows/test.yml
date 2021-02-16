@@ -17,5 +17,9 @@ jobs:
         run: lein deps
       - name: Run tests
         env:
-          UPWORK_SECURITY_TOKEN: foo
+          BOT_TOKEN: token
+          TELEGRAM_CHAT_ID: 11111
+          UPWORK_ORG_ID: 1
+          UPWORK_SECURITY_TOKEN: token
+          UPWORK_USER_ID: 2
         run: lein test
