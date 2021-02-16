@@ -23,7 +23,7 @@
   (while true
     (let [old-checked-ids (get-checked-ids)
           result (runner old-checked-ids
-                         #(p/hourly-or-high-fixed-budget? % c/min-fixed-budget)
+                         p/hourly-or-high-fixed-budget?
                          #(p/budget-above? % c/min-hourly-budget)
                          p/spread-limited?
                          p/country-not-blacklisted?

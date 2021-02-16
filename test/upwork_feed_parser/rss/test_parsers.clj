@@ -1,4 +1,4 @@
-(ns upwork-feed-parser.rss-parsers-test
+(ns upwork-feed-parser.rss.test-parsers
   (:require [clojure.test :refer [deftest is]]
             [upwork-feed-parser.rss.parsers :refer :all]
             [expectations.clojure.test
