@@ -14,7 +14,7 @@
         parsed-feed (into [] (rss/get-and-parse-feeds))
         new-entries (filter #(not-in? (:id %) checked-ids) parsed-feed)
         new-checked-ids (set (concat checked-ids (map :id parsed-feed)))
-        filtered-new-entries (filter (reduce every-pred pred-fs) new-entries)]
+        filtered-new-entries (filter (apply every-pred pred-fs) new-entries)]
     {:checked-ids new-checked-ids :new-entries filtered-new-entries}))
 
 (defn -main
